@@ -1,4 +1,4 @@
-import { API_URL } from "../constant";
+import { API_URL, ROLE } from "../constant";
 import requestPN from "request-promise-native";
 import ApiService from "./api.service";
 
@@ -12,6 +12,10 @@ class AuthService extends ApiService {
 
     if (response) {
       const data = JSON.parse(response);
+      if(data.user?.role?.name !== ROLE.SUPER_ADMIN){
+        alert.show('Wrong email or password');
+        return;
+      }
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
       return data;
