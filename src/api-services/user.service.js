@@ -16,6 +16,24 @@ class UserService extends ApiService {
     }
     return;
   }
+
+  async getMany({ component, alert, qs = {} }) {
+    console.log(qs);
+    const response = await requestPN
+      .get(API_URL + "/users", {
+        ...this.getAuth(),
+        qs,
+      })
+      .catch((errorResponse) => {
+        this.handleErrorApiWithAuth({ errorResponse, alert, component });
+      });
+
+    if (response) {
+      const data = JSON.parse(response);
+      return data;
+    }
+    return;
+  }
 }
 
 export default new UserService();

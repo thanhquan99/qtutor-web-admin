@@ -1,66 +1,114 @@
-import React, { useState, useEffect } from 'react';
-import { List, Avatar, Skeleton, Divider } from 'antd';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, { Component } from "react";
+import { withAlert } from "react-alert";
+import ReactPaginate from "react-paginate";
+import userService from "../../api-services/user.service";
+import UserAPIContext from "../../context/user-api.context";
+import User from "./user.component";
 
-const ListUsers = () => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+class ListUsers extends Component {
+  static contextType = UserAPIContext;
+  constructor(props) {
+    super(props);
+    this.handlePageClick = this.handlePageClick.bind(this);
+    this.state = {};
+  }
 
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    console.log('oke');
-    fetch('https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo')
-      .then(res => res.json())
-      .then(body => {
-        setData([...data, ...body.results]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
+  async componentDidMount() {
+    const { alert } = this.props;
+    const data = await userService.getMany({
+      component: this,
+      alert,
+      qs: this.context,
+    });
+    this.setState((curState) => ({
+      ...curState,
+      users: data.results,
+      total: data.total,
+    }));
+  }
 
-  useEffect(() => {
-    loadMoreData();
-  }, []);
+  async handlePageClick(e) {
+    this.context.page = e.selected + 1;
+    const data = await userService.getMany({
+      component: this,
+      alert,
+      qs: this.context,
+    });
+    console.log(data);
+    this.setState((curState) => ({
+      ...curState,
+      users: data.results,
+      total: data.total,
+    }));
+  }
 
-  return (
-    <div
-      id="scrollableDiv"
-      style={{
-        height: 400,
-        overflow: 'auto',
-        padding: '0 16px',
-        border: '1px solid rgba(140, 140, 140, 0.35)',
-      }}
-    >
-      <InfiniteScroll
-        dataLength={data.length}
-        next={loadMoreData}
-        hasMore={data.length < 50}
-        loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-        scrollableTarget="scrollableDiv"
-      >
-        <List
-          dataSource={data}
-          renderItem={item => (
-            <List.Item key={item.id}>
-              <List.Item.Meta
-                avatar={<Avatar src={item.picture.large} />}
-                title={<a href="https://ant.design">{item.name.last}</a>}
-                description={item.email}
-              />
-              <div>Content</div>
-            </List.Item>
-          )}
-        />
-      </InfiniteScroll>
-    </div>
-  );
-};
+  render() {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col-12 col-sm-12 col-md-12">
+            <div className="card">
+              <div className="card-header">
+                <h4>Users</h4>
+              </div>
+              <div className="card-body">
+                <div
+                  className="table-responsive"
+                  id="proTeamScroll"
+                  tabIndex="2"
+                  style={{
+                    height: "1000",
+                    overflow: "hidden",
+                    outline: "none",
+                  }}
+                >
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Birth Day</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.users?.map((user) => {
+                        return <User user={user} key={user.id} />;
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-export default ListUsers;
+        <div className="row">
+          <ReactPaginate
+            nextLabel=">>"
+            onPageChange={this.handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={Math.ceil(this.state.total / 10)}
+            previousLabel="<<"
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            previousClassName="page-item"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            containerClassName="pagination"
+            activeClassName="active"
+            renderOnZeroPageCount={null}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default withAlert()(ListUsers);
