@@ -1,7 +1,9 @@
 import _ from "lodash";
 import { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-import ListUsers from "../user/list-users.component";
+import eventBus from "../../common/EventBus";
+import Login from "../auth/login.component";
+import Sidebar from "./sidebar.component";
 
 class AdminBoard extends Component {
   constructor(props) {
@@ -19,55 +21,46 @@ class AdminBoard extends Component {
         currentUser: user,
       });
     }
+
+    eventBus.on("login", () => {
+      this.login();
+    });
+    eventBus.on("logout", () => {
+      this.logout();
+    });
+  }
+
+  componentWillUnmount() {
+    eventBus.remove("logout");
+    eventBus.remove("login");
+  }
+
+  logout() {
+    this.setState({
+      currentUser: undefined,
+    });
+  }
+
+  login() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    this.setState({
+      currentUser: user,
+    });
+    console.log(this.state);
   }
 
   render() {
-    const { currentUser } = this.state;
-
     return (
       <div className="">
-        <div id="wrapper" class="wrapper-content">
-          <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-              <li>
-                <a href="#1">Dashboard</a>
-              </li>
-              <li>
-                <a href="/admin-board/users">Users</a>
-              </li>
-              <li>
-                <a href="#1">Tutors</a>
-              </li>
-              <li>
-                <a href="#1">Students</a>
-              </li>
-              {/* <li class="active">
-                <a href="#1">About</a>
-              </li>
-              <li>
-                <a href="#1">Services</a>
-              </li>
-              <li>
-                <a href="#1">Contact</a>
-              </li> */}
-            </ul>
-          </div>
+        <div id="wrapper" className="wrapper-content">
+          {!_.isEmpty(this.state.currentUser) && <Sidebar />}
 
           <div id="page-content-wrapper">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg-12">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-lg-12">
                   <Switch>
-                    <Route
-                      path="/admin-board"
-                      render={({ match: { url } }) => (
-                        <>
-                          {/* <Route path={`${url}/`} component={Backend} exact />
-        <Route path={`${url}/home`} component={Dashboard} /> */}
-                          <Route path={`${url}/users`} component={ListUsers} />
-                        </>
-                      )}
-                    />
+                    <Route exact path="/login" component={Login} />
                   </Switch>
                 </div>
               </div>

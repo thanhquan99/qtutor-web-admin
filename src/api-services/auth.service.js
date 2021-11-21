@@ -1,6 +1,7 @@
 import { API_URL, ROLE } from "../constant";
 import requestPN from "request-promise-native";
 import ApiService from "./api.service";
+import eventBus from "../common/EventBus";
 
 class AuthService extends ApiService {
   async login({ payload, alert }) {
@@ -18,6 +19,7 @@ class AuthService extends ApiService {
       }
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+      eventBus.dispatch("login");
       return data;
     }
     return;

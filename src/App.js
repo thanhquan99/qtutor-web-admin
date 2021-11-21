@@ -2,15 +2,16 @@ import _ from "lodash";
 import { Component } from "react";
 import {
   positions,
-  Provider as AlertProvider, transitions, types
+  Provider as AlertProvider,
+  transitions,
+  types,
 } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import eventBus from "./common/EventBus";
 import AdminBoard from "./components/admin-board/admin-board.component";
-import Login from "./components/auth/login.component";
+import { withRouter } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
@@ -28,18 +29,16 @@ class App extends Component {
       this.setState({
         currentUser: user,
       });
+    } else {
+      this.props.history.push("/login");
     }
 
-    eventBus.on("logout", () => {
-      this.logout();
-    });
     eventBus.on("login", () => {
       this.login();
     });
   }
 
   componentWillUnmount() {
-    eventBus.remove("logout");
     eventBus.remove("login");
   }
 
@@ -49,7 +48,8 @@ class App extends Component {
     this.setState({
       currentUser: undefined,
     });
-    window.location.reload();
+    eventBus.dispatch("logout")
+    this.props.history.push("/login");
   }
 
   login() {
@@ -94,13 +94,11 @@ class App extends Component {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <Switch>
-          <Route exact path={["/", "/login"]} component={Login} />
-          <Route exact path="/admin-board" component={AdminBoard} />
-        </Switch>
+
+        <AdminBoard />
       </AlertProvider>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
