@@ -48,7 +48,7 @@ class App extends Component {
     this.setState({
       currentUser: undefined,
     });
-    eventBus.dispatch("logout")
+    eventBus.dispatch("logout");
     this.props.history.push("/login");
   }
 
@@ -76,6 +76,7 @@ class App extends Component {
             <Navbar.Brand href="#home">QTutor</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="me-auto"></Nav>
               {!_.isEmpty(currentUser) && (
                 <Nav>
                   <NavDropdown
