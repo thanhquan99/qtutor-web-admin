@@ -3,6 +3,7 @@ import { withAlert } from "react-alert";
 import ReactPaginate from "react-paginate";
 import userService from "../../api-services/user.service";
 import UserAPIContext from "../../context/user-api.context";
+import UserFilter from "./user-filters.component";
 import User from "./user.component";
 
 class ListUsers extends Component {
@@ -10,6 +11,7 @@ class ListUsers extends Component {
   constructor(props) {
     super(props);
     this.handlePageClick = this.handlePageClick.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
     this.state = {};
   }
 
@@ -42,6 +44,19 @@ class ListUsers extends Component {
     }));
   }
 
+  async handleFilter() {
+    const data = await userService.getMany({
+      component: this,
+      alert,
+      qs: this.context,
+    });
+    this.setState((curState) => ({
+      ...curState,
+      users: data.results,
+      total: data.total,
+    }));
+  }
+
   render() {
     return (
       <div className="container">
@@ -51,6 +66,7 @@ class ListUsers extends Component {
               <div className="card-header">
                 <h4>Users</h4>
               </div>
+              <UserFilter handleFilter={this.handleFilter}></UserFilter>
               <div className="card-body">
                 <div
                   className="table-responsive"

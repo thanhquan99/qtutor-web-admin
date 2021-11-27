@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import eventBus from "../../common/EventBus";
+import { DEFAULT_FILTER } from "../../constant";
 import { UserAPIProvider } from "../../context/user-api.context";
 import Login from "../auth/login.component";
 import ListUsers from "../user/list-users.component";
@@ -64,11 +65,7 @@ class AdminBoard extends Component {
                   <Switch>
                     <Route exact path="/login" component={Login} />
                     <UserAPIProvider
-                      value={{
-                        perPage: 10,
-                        page: 1,
-                        orderBy: JSON.stringify({ createdAt: "DESC" }),
-                      }}
+                      value={DEFAULT_FILTER}
                     >
                       <Route exact path="/users" component={ListUsers} />
                     </UserAPIProvider>
