@@ -1,105 +1,39 @@
-import _ from "lodash";
 import { Component } from "react";
-import {
-  positions,
-  Provider as AlertProvider,
-  transitions,
-  types,
-} from "react-alert";
-import AlertTemplate from "react-alert-template-basic";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import "./App.css";
-import eventBus from "./common/EventBus";
-import AdminBoard from "./components/admin-board/admin-board.component";
-import { withRouter } from "react-router-dom";
+import AppView from "./views/app/app.view";
+import LoginView from "./views/auth/login.view";
+import { ToastContainer } from "react-toastify";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.logout = this.logout.bind(this);
-
-    this.state = {
-      currentUser: undefined,
-    };
-  }
+  state = {
+    loading: true,
+    accessToken: undefined,
+  };
 
   componentDidMount() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!_.isEmpty(user)) {
-      this.setState({
-        currentUser: user,
-      });
-    } else {
-      this.props.history.push("/login");
-    }
-
-    eventBus.on("login", () => {
-      this.login();
-    });
-  }
-
-  componentWillUnmount() {
-    eventBus.remove("login");
-  }
-
-  logout() {
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
-    this.setState({
-      currentUser: undefined,
-    });
-    eventBus.dispatch("logout");
-    this.props.history.push("/login");
-  }
-
-  login() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    this.setState({
-      currentUser: user,
-    });
+    const accessToken = localStorage.getItem("accessToken");
+    this.setState({ accessToken });
   }
 
   render() {
-    const { currentUser } = this.state;
-    const alertOptions = {
-      position: positions.TOP_RIGHT,
-      timeout: 5000,
-      offset: "30px",
-      transition: transitions.FADE,
-      type: types.INFO,
-    };
-
+    const { accessToken } = this.state;
     return (
-      <AlertProvider template={AlertTemplate} {...alertOptions}>
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed="top">
-          <Container>
-            <Navbar.Brand href="#home">QTutor</Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="me-auto"></Nav>
-              {!_.isEmpty(currentUser) && (
-                <Nav>
-                  <NavDropdown
-                    title={currentUser.profile.name}
-                    id="collasible-nav-dropdown"
-                  >
-                    <NavDropdown.Item href="/users/profile">
-                      Profile
-                    </NavDropdown.Item>
-                    <NavDropdown.Item onClick={this.logout}>
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </Nav>
-              )}
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-
-        <AdminBoard />
-      </AlertProvider>
+      <>
+        <ToastContainer
+          position="top-right"
+          autoClose={1500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        {!accessToken ? <LoginView /> : <AppView />};
+      </>
     );
   }
 }
 
-export default withRouter(App);
+export default App;
