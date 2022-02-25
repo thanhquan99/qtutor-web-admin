@@ -2,13 +2,13 @@ import { Table } from "antd";
 import _ from "lodash";
 import React, { Component } from "react";
 import { SORTER_ORDER } from "../../constant";
-import { UserSearchForm } from "../../components/user/serach-form";
-import { userColumns } from "./table-column";
-import userApi from "../../api/user.api";
+import { TutorSearchForm } from "../../components/tutor/search-form";
+import { dataColumns } from "./table-column";
+import tutorApi from "../../api/tutor.api";
 
-class ListTutorView extends Component {
+class ListTutorsView extends Component {
   state = {
-    users: [],
+    tutors: [],
     pagination: {
       current: 1,
       pageSize: 10,
@@ -46,16 +46,8 @@ class ListTutorView extends Component {
   };
 
   handleSearchForm = async (filter) => {
-    const newFilter = {};
-    const newCustomFilter = {};
-    if (filter.email) {
-      newFilter.email = { $ilike: filter.email };
-    }
-    if (filter.name) {
-      newCustomFilter.name = filter.name;
-    }
-    await this.setState({ filter: newFilter, customFilter: newCustomFilter });
-
+    console.log(filter)
+    await this.setState({ customFilter: filter });
     await this.fetchData();
   };
 
@@ -63,7 +55,7 @@ class ListTutorView extends Component {
     this.setState({ loading: true });
 
     const { pagination, filter, orderBy, customFilter } = this.state;
-    const res = await userApi.getMany({
+    const res = await tutorApi.getMany({
       perPage: pagination.pageSize,
       page: pagination.current,
       filter: JSON.stringify(filter),
@@ -76,7 +68,7 @@ class ListTutorView extends Component {
     if (res) {
       this.setState((curState) => ({
         loading: false,
-        users: res.results,
+        tutors: res.results,
         pagination: {
           ...curState.pagination,
           total: res.total,
@@ -86,14 +78,14 @@ class ListTutorView extends Component {
   };
 
   render() {
-    const { users, pagination, loading } = this.state;
+    const { tutors, pagination, loading } = this.state;
     return (
       <div>
-        <UserSearchForm handleSearchForm={this.handleSearchForm} />
+        <TutorSearchForm handleSearchForm={this.handleSearchForm} />
         <Table
-          columns={userColumns}
+          columns={dataColumns}
           rowKey={(record) => record.id}
-          dataSource={users}
+          dataSource={tutors}
           pagination={pagination}
           loading={loading}
           onChange={this.handleTableChange}
@@ -103,4 +95,4 @@ class ListTutorView extends Component {
   }
 }
 
-export default ListTutorView;
+export default ListTutorsView;

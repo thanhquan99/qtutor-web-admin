@@ -1,6 +1,5 @@
 import {
   AppstoreOutlined,
-  BarChartOutlined,
   CloudOutlined,
   HomeOutlined,
   ShopOutlined,
@@ -34,11 +33,11 @@ class MenuComponent extends React.Component {
           <Menu.Item key="3" icon={<UserOutlined />}>
             <Link to="/users">Users</Link>
           </Menu.Item>
-          <Menu.Item key="4" icon={<BarChartOutlined />}>
-            nav 4
+          <Menu.Item key="4" icon={<UserOutlined />}>
+            <Link to="/tutors">Tutors</Link>
           </Menu.Item>
-          <Menu.Item key="5" icon={<CloudOutlined />}>
-            nav 5
+          <Menu.Item key="5" icon={<UserOutlined />}>
+            <Link to="/students">Students</Link>
           </Menu.Item>
           <Menu.Item key="6" icon={<AppstoreOutlined />}>
             nav 6

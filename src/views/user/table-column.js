@@ -1,61 +1,31 @@
+import { Avatar, Space } from "antd";
+import GenderComponent from "../../components/helper/gender-component";
+
 export const userColumns = [
-  {
-    title: "Email",
-    dataIndex: "email",
-    // render: (e) => e.profile?.name,
-  },
   {
     title: "Name",
     dataIndex: "profile",
-    render: (profile) => profile?.name,
+    render: (e) => (
+      <Space>
+        <Avatar size={40} src={e?.avatar} />
+        <span>{e?.name}</span>
+        <GenderComponent isMale={e?.isMale} />
+      </Space>
+    ),
   },
-  // {
-  //   title: "Subject",
-  //   dataIndex: "subject",
-  //   render: (e) => e.name,
-  // },
-  // {
-  //   title: "Price",
-  //   dataIndex: "price",
-  //   sorter: true,
-  // },
-  // {
-  //   title: "Pay Type",
-  //   dataIndex: "payType",
-  // },
-  // {
-  //   title: "Status",
-  //   dataIndex: "status",
-  //   render: (e) => (
-  //     <Tag color={STATUS_COLOR[e]} key={e}>
-  //       {e.toUpperCase()}
-  //     </Tag>
-  //   ),
-  // },
-  // {
-  //   title: "Start Time",
-  //   dataIndex: "startTime",
-  //   sorter: true,
-  //   render: (e) => new Date(e).toLocaleString("vi-VN"),
-  // },
-  // {
-  //   title: "End Time",
-  //   dataIndex: "endTime",
-  //   sorter: true,
-  //   render: (e) => new Date(e).toLocaleString("vi-VN"),
-  // },
-  // {
-  //   title: "Modified By",
-  //   dataIndex: "modifiedUser",
-  //   render: (e) => e?.profile?.name,
-  // },
-  // {
-  //   title: "",
-  //   render: (text, record) => (
-  //     <Space size="middle">
-  //       {/* {record.isEdit && <TransactionModalEdit transaction={record} />}
-  //       {record.isCanPay && <TransactionPaypalPayment transaction={record} />} */}
-  //     </Space>
-  //   ),
-  // },
+  {
+    title: "Email",
+    dataIndex: "email",
+  },
+  {
+    title: "City",
+    dataIndex: "profile",
+    render: (profile) => profile?.city?.name,
+  },
+  {
+    title: "Created At",
+    dataIndex: "createdAt",
+    sorter: true,
+    render: (e) => new Date(e).toLocaleString("vi-VN"),
+  },
 ];
