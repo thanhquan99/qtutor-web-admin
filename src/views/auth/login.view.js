@@ -1,5 +1,6 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import { Component } from "react";
+import { ToastContainer } from "react-toastify";
 import authApi from "../../api/auth.api";
 
 class LoginView extends Component {

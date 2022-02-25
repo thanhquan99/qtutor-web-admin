@@ -6,16 +6,7 @@ export const UserSearchForm = (props) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    const filter = {};
-    if (values.payType) {
-      filter.payType = values.payType;
-    }
-
-    if (values.status) {
-      filter.status = values.status;
-    }
-
-    await props.handleSearchForm(filter);
+    await props.handleSearchForm(values);
   };
 
   return (

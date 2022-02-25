@@ -16,6 +16,7 @@ class ListUsersView extends Component {
     loading: false,
     filter: {},
     orderBy: {},
+    customFilter: {},
   };
 
   componentDidMount = async () => {
@@ -45,20 +46,28 @@ class ListUsersView extends Component {
   };
 
   handleSearchForm = async (filter) => {
-    console.log(filter)
-    await this.setState({ filter });
-    // console.log(this.state);
-    // await this.fetchData();
+    const newFilter = {};
+    const newCustomFilter = {};
+    if (filter.email) {
+      newFilter.email = { $ilike: filter.email };
+    }
+    if (filter.name) {
+      newCustomFilter.name = filter.name;
+    }
+    await this.setState({ filter: newFilter, customFilter: newCustomFilter });
+
+    await this.fetchData();
   };
 
   fetchData = async () => {
     this.setState({ loading: true });
 
-    const { pagination, filter, orderBy } = this.state;
+    const { pagination, filter, orderBy, customFilter } = this.state;
     const res = await userApi.getMany({
       perPage: pagination.pageSize,
       page: pagination.current,
       filter: JSON.stringify(filter),
+      customFilter: JSON.stringify(customFilter),
       orderBy: _.isEmpty(orderBy)
         ? JSON.stringify({ createdAt: "DESC" })
         : JSON.stringify(orderBy),

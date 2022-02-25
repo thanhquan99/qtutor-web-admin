@@ -96,27 +96,11 @@ export class AxiosService {
           data: { message },
         },
       } = err;
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(message, TOAST_OPTIONS);
     });
 
     if (res) {
-      toast.success("Success", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success("Success", TOAST_OPTIONS);
       return res;
     }
   }
@@ -128,27 +112,11 @@ export class AxiosService {
           data: { message },
         },
       } = err;
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(message, TOAST_OPTIONS);
     });
 
     if (res) {
-      toast.success("Success", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success("Success", TOAST_OPTIONS);
       return res;
     }
   }
@@ -160,27 +128,11 @@ export class AxiosService {
           data: { message },
         },
       } = err;
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(message, TOAST_OPTIONS);
     });
 
     if (res) {
-      toast.success("Delete successfully", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success("Delete successfully", TOAST_OPTIONS);
       return res;
     }
   }
