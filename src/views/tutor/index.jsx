@@ -47,7 +47,12 @@ class ListTutorsView extends Component {
 
   handleSearchForm = async (filter) => {
     console.log(filter)
-    await this.setState({ customFilter: filter });
+    const newFilter = {};
+    if (_.isBoolean(filter.isActive)) {
+      console.log(filter)
+      newFilter.isActive = filter.isActive;
+    }
+    await this.setState({ customFilter: filter, filter: newFilter });
     await this.fetchData();
   };
 
