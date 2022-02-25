@@ -6,6 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import HeaderComponent from "../../components/header";
 import MenuComponent from "../../components/menu";
 import DashboardView from "../dashboard";
+import ListStudentsView from "../student";
 import ListTutorsView from "../tutor";
 import ListUsersView from "../user";
 import "./style.css";
@@ -44,6 +45,7 @@ class AppView extends Component {
                 />
                 <Route exact path="/users" component={ListUsersView} />
                 <Route exact path="/tutors" component={ListTutorsView} />
+                <Route exact path="/students" component={ListStudentsView} />
               </Switch>
             </div>
           </Content>

@@ -110,10 +110,10 @@ class DashboardView extends Component {
                 </div>
                 <div class="circle-tile-content dark-blue">
                   <div class="circle-tile-description text-faded">
-                    Total Users
+                    Total Courses
                   </div>
                   <div class="circle-tile-number text-faded ">
-                    {data.totalUsers}
+                    {data.totalCourses}
                   </div>
                 </div>
               </div>
